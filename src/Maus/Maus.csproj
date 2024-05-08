@@ -9,6 +9,6 @@
     
     <ItemGroup>
         <PackageReference Include="HidApi.Net" Version="1.0.1" />
-        <PackageReference Include="GirCore.Adw-1" Version="0.5.0-preview.4" />
+        <PackageReference Include="GirCore.Adw-1" Version="0.5.0" />
     </ItemGroup>
 </Project>

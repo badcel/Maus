@@ -95,7 +95,7 @@ public class MouseView : Gtk.Box
             sender: colorDialogButton,
             signalHandler: SetColor,
             after: false,
-            detail: "rgba" //TODO: Should be Gtk.ColorDialogButton.RgbaPropertyDefinition.UnmanagedName
+            detail: Gtk.ColorDialogButton.RgbaPropertyDefinition.UnmanagedName
         );
         var colorActionRow = Adw.ActionRow.New();
         colorActionRow.Title = "Color";

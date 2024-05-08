@@ -1,12 +1,10 @@
-using Gdk.Internal;
-
 namespace Maus;
 
 public static class RgbaConverter
 {
     public static Gdk.RGBA FromColor(System.Drawing.Color color)
     {
-        return new Gdk.RGBA(RGBAManagedHandle.Create())
+        return new Gdk.RGBA
         {
             Red = color.R / 256.0f,
             Green = color.G / 256.0f,
