@@ -1,57 +1,62 @@
-using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
+using GObject;
 
 namespace Maus;
 
-public class MouseView : Gtk.Box
+[Subclass<Gtk.Box>]
+public partial class MouseView
 {
-    private static readonly string[] pollingRates = { "1000", "500", "125" };
-    private static readonly string[] liftOffDistances = { "2", "3" };
- 
-    private readonly Mouse mouse;
-    private Gtk.Entry dpiEntry;
-    private Gtk.ColorDialogButton colorDialogButton;
-    private Adw.ComboRow pollingComboRow;
-    private Adw.ComboRow liftOffComboRow;
+    private static readonly string[] pollingRates = ["1000", "500", "125"];
+    private static readonly string[] liftOffDistances = ["2", "3"];
 
-    public MouseView(Mouse mouse)
+    private readonly Mouse? mouse;
+    private readonly Gtk.Entry dpiEntry = Gtk.Entry.New();
+    private readonly Gtk.ColorDialogButton colorDialogButton = Gtk.ColorDialogButton.New(Gtk.ColorDialog.New());
+    private readonly Adw.ComboRow pollingComboRow = Adw.ComboRow.New();
+    private readonly Adw.ComboRow liftOffComboRow = Adw.ComboRow.New();
+
+    public MouseView(Mouse mouse) : this()
     {
         this.mouse = mouse;
-        
-        CreateUi();
+
+        CreateUi(mouse);
     }
 
     private void SetDpi(GObject.Object obj, NotifySignalArgs args)
     {
+        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
+
         mouse.SetDpi(int.Parse(dpiEntry.GetText()));
     }
 
     private void SetPollingRate(GObject.Object obj, NotifySignalArgs args)
     {
+        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
+
         mouse.SetPollingRate(int.Parse(pollingRates[pollingComboRow.Selected]));
     }
 
     private void SetLiftOffDistance(GObject.Object obj, NotifySignalArgs args)
     {
+        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
+
         mouse.SetLiftOffDistance(int.Parse(liftOffDistances[liftOffComboRow.Selected]));
     }
-    
+
     private void SetColor(GObject.Object obj, NotifySignalArgs args)
     {
+        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
+
         var rgba = colorDialogButton.GetRgba();
         mouse.SetColor(RgbaConverter.ToColor(rgba));
     }
 
-    [MemberNotNull(nameof(dpiEntry))]
-    [MemberNotNull(nameof(colorDialogButton))]
-    [MemberNotNull(nameof(pollingComboRow))]
-    [MemberNotNull(nameof(liftOffComboRow))]
-    private void CreateUi()
+    private void CreateUi(Mouse newMouse)
     {
         SetOrientation(Gtk.Orientation.Vertical);
         SetSpacing(5);
 
-        dpiEntry = Gtk.Entry.New();
-        dpiEntry.SetText(mouse.GetDpi().ToString());
+        dpiEntry.SetText(newMouse.GetDpi().ToString());
         Gtk.Editable.Text_PropertyDefinition.Notify(
             sender: dpiEntry,
             signalHandler: SetDpi,
@@ -64,30 +69,27 @@ public class MouseView : Gtk.Box
         dpiActionRow.AddSuffix(dpiEntry);
         dpiActionRow.SetActivatableWidget(dpiEntry);
 
-        pollingComboRow = Adw.ComboRow.New();
         pollingComboRow.Title = "Polling rate";
         pollingComboRow.Subtitle = "in reports / second";
         pollingComboRow.SetModel(Gtk.StringList.New(pollingRates));
-        pollingComboRow.SetSelected((uint) Array.IndexOf(pollingRates, mouse.GetPollingRate().ToString()));
+        pollingComboRow.SetSelected((uint)Array.IndexOf(pollingRates, newMouse.GetPollingRate().ToString()));
         Adw.ComboRow.SelectedPropertyDefinition.Notify(
             sender: pollingComboRow,
             signalHandler: SetPollingRate,
             after: false
         );
-        
-        liftOffComboRow = Adw.ComboRow.New();
+
         liftOffComboRow.Title = "Lift off distance";
         liftOffComboRow.Subtitle = "in mm";
         liftOffComboRow.SetModel(Gtk.StringList.New(liftOffDistances));
-        liftOffComboRow.SetSelected((uint) Array.IndexOf(liftOffDistances, mouse.GetLiftOffDistance().ToString()));
+        liftOffComboRow.SetSelected((uint)Array.IndexOf(liftOffDistances, newMouse.GetLiftOffDistance().ToString()));
         Adw.ComboRow.SelectedPropertyDefinition.Notify(
             sender: liftOffComboRow,
             signalHandler: SetLiftOffDistance,
             after: false
         );
 
-        colorDialogButton = Gtk.ColorDialogButton.New(Gtk.ColorDialog.New());
-        colorDialogButton.SetRgba(RgbaConverter.FromColor(mouse.GetColor()));
+        colorDialogButton.SetRgba(RgbaConverter.FromColor(newMouse.GetColor()));
         Gtk.ColorDialogButton.RgbaPropertyDefinition.Notify(
             sender: colorDialogButton,
             signalHandler: SetColor,

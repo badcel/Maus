@@ -8,7 +8,7 @@ public class DemoMouse : Mouse
     private int pollingRate = 1000;
     private int liftOffDistance = 2;
     private Color color = Color.Blue;
-    
+
     public int GetDpi()
     {
         return dpi;

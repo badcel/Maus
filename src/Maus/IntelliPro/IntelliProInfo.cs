@@ -2,15 +2,8 @@ using HidApi;
 
 namespace Maus;
 
-public class IntelliProInfo : MouseInfo
+public class IntelliProInfo(DeviceInfo deviceInfo) : MouseInfo
 {
-    private readonly DeviceInfo deviceInfo;
-
-    public IntelliProInfo(DeviceInfo deviceInfo)
-    {
-        this.deviceInfo = deviceInfo;
-    }
-
     public string GetName()
     {
         return $"{deviceInfo.ManufacturerString} {deviceInfo.ProductString} ({deviceInfo.Path})";
