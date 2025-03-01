@@ -9,7 +9,7 @@
     
     <ItemGroup>
         <PackageReference Include="HidApi.Net" Version="1.0.4" />
-        <PackageReference Include="GirCore.Adw-1" Version="0.6.2" />
-        <PackageReference Include="GirCore.GObject-2.0.Integration" Version="0.6.2" />
+        <PackageReference Include="GirCore.Adw-1" Version="0.6.3" />
+        <PackageReference Include="GirCore.GObject-2.0.Integration" Version="0.6.3" />
     </ItemGroup>
 </Project>
