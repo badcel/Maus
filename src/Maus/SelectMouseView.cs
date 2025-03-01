@@ -1,12 +1,15 @@
+using System.Diagnostics;
+
 namespace Maus;
 
-public class SelectMouseView : Gtk.Box
+[GObject.Subclass<Gtk.Box>]
+public partial class SelectMouseView
 {
-    private readonly IEnumerable<MouseInfo> mouseInfos;
-    private readonly Action<MouseInfo> showMouse;
-    private Gtk.ListBox? listBox;
+    private readonly IEnumerable<MouseInfo>? mouseInfos;
+    private readonly Action<MouseInfo>? showMouse;
+    private readonly Gtk.ListBox listBox = Gtk.ListBox.New();
 
-    public SelectMouseView(IEnumerable<MouseInfo> mouseInfos, Action<MouseInfo> showMouse)
+    public SelectMouseView(IEnumerable<MouseInfo> mouseInfos, Action<MouseInfo> showMouse) : this()
     {
         this.mouseInfos = mouseInfos;
         this.showMouse = showMouse;
@@ -16,10 +19,11 @@ public class SelectMouseView : Gtk.Box
 
     private void CreateUi()
     {
+        Debug.Assert(mouseInfos is not null, $"{nameof(SelectMouseView)} is not initialized.");
+
         SetOrientation(Gtk.Orientation.Vertical);
         SetSpacing(5);
 
-        listBox = Gtk.ListBox.New();
         listBox.SelectionMode = Gtk.SelectionMode.Single;
 
         foreach (var intelliProInfo in mouseInfos)
@@ -33,20 +37,22 @@ public class SelectMouseView : Gtk.Box
 
     private void ListBoxOnOnRowActivated(Gtk.ListBox sender, Gtk.ListBox.RowActivatedSignalArgs args)
     {
-        var label = (Gtk.Label?) args.Row.Child;
+        Debug.Assert(mouseInfos is not null, $"{nameof(SelectMouseView)} is not initialized.");
+        Debug.Assert(showMouse is not null, $"{nameof(SelectMouseView)} is not initialized.");
+
+        var label = (Gtk.Label?)args.Row.Child;
 
         if (label is null)
             throw new Exception("Selected row does not have a child");
-        
+
         var intelliProInfo = mouseInfos.First(x => x.GetName() == label.GetText());
         showMouse(intelliProInfo);
     }
 
     public override void Dispose()
     {
-        if(listBox is not null)
-            listBox.OnRowActivated -= ListBoxOnOnRowActivated;
-        
+        listBox.OnRowActivated -= ListBoxOnOnRowActivated;
+
         base.Dispose();
     }
 }

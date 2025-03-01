@@ -4,16 +4,16 @@ using Maus;
 var application = Adw.Application.New("org.Maus", Gio.ApplicationFlags.FlagsNone);
 application.OnActivate += (sender, args) =>
 {
-    var window = Gtk.ApplicationWindow.New((Adw.Application) sender);
+    var window = Gtk.ApplicationWindow.New((Adw.Application)sender);
 
     void Show(MouseInfo info)
     {
-        if(window.Child is IDisposable d)
+        if (window.Child is IDisposable d)
             d.Dispose();
-        
+
         window.SetChild(new MouseView(info.Connect()));
     }
-    
+
 #if DEMO
     var mouseInfos = DemoEnumerator.Enumerate();
 #else

@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Maus;
 
-public class IntelliPro : IDisposable, Mouse
+public class IntelliPro(string path) : IDisposable, Mouse
 {
     private enum Get : byte
     {
@@ -21,13 +21,8 @@ public class IntelliPro : IDisposable, Mouse
         Color = 0xB2
     }
 
-    private readonly HidApi.Device device;
+    private readonly HidApi.Device device = new(path);
 
-    public IntelliPro(string path)
-    {
-        device = new HidApi.Device(path);
-    }
-    
     public string GetName()
     {
         return $"{device.GetManufacturer()} {device.GetProduct()}";
@@ -47,7 +42,7 @@ public class IntelliPro : IDisposable, Mouse
         if (dpi is < 200 or > 16000)
             throw new ArgumentOutOfRangeException(nameof(dpi), dpi, "Please ensure that the dpi value is greater or equal to 200 and smaller or equal to 16000");
 
-        SendData(Set.Dpi, BitConverter.GetBytes((short) dpi));
+        SendData(Set.Dpi, BitConverter.GetBytes((short)dpi));
     }
 
     public int GetPollingRate()
@@ -95,7 +90,7 @@ public class IntelliPro : IDisposable, Mouse
             _ => throw new ArgumentOutOfRangeException(nameof(distance), distance, "The lift off distance must be one of 2 or 3")
         };
 
-        SendData(Set.LiftOffDistance, new[] { value });
+        SendData(Set.LiftOffDistance, [value]);
     }
 
     public Color GetColor()
@@ -106,14 +101,14 @@ public class IntelliPro : IDisposable, Mouse
 
     public void SetColor(Color color)
     {
-        SendData(Set.Color, new[] { color.R, color.G, color.B });
+        SendData(Set.Color, [color.R, color.G, color.B]);
     }
 
     private ReadOnlySpan<byte> SendRequest(Get get)
     {
         var sendData = new byte[73];
         sendData[0] = 0x24;
-        sendData[1] = (byte) get;
+        sendData[1] = (byte)get;
         sendData[2] = 0x01;
 
         device.SendFeatureReport(sendData);
@@ -128,8 +123,8 @@ public class IntelliPro : IDisposable, Mouse
 
         var sendData = new byte[73];
         sendData[0] = 0x24;
-        sendData[1] = (byte) set;
-        sendData[2] = (byte) data.Length;
+        sendData[1] = (byte)set;
+        sendData[2] = (byte)data.Length;
         data.CopyTo(sendData, 3);
 
         device.SendFeatureReport(sendData);
