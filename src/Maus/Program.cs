@@ -4,25 +4,13 @@ using Maus;
 var application = Adw.Application.New("org.Maus", Gio.ApplicationFlags.FlagsNone);
 application.OnActivate += (sender, args) =>
 {
-    var window = Gtk.ApplicationWindow.New((Adw.Application)sender);
-
-    void Show(MouseInfo info)
-    {
-        if (window.Child is IDisposable d)
-            d.Dispose();
-
-        window.SetChild(MouseView.New(info.Connect()));
-    }
-
-#if DEMO
-    var mouseInfos = DemoEnumerator.Enumerate();
-#else
-    var mouseInfos = IntelliProEnumerator.Enumerate();
-#endif
-    window.Title = "Window";
-    window.SetDefaultSize(300, 300);
-    window.SetChild(SelectMouseView.New(mouseInfos, Show));
-    window.Show();
+    var detailViewPresenter = new DetailPresenter();
+    var selectionViewPresenter = new SelectionPresenter(new Maus.Core.Connector(), detailViewPresenter);
+    var shellPresenter = new ShellPresenter(selectionViewPresenter, detailViewPresenter);
+ 
+    var shell = Shell.New(shellPresenter);
+    shell.SetApplication(application);
+    shell.Show();
 };
 
 var exitCode = application.RunWithSynchronizationContext(null);

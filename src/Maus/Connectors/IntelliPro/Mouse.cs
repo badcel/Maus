@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Maus;
+namespace Maus.Connectors.IntelliPro;
 
-public class IntelliPro(string path) : IDisposable, Mouse
+public class Mouse(string path) : IDisposable, Core.Mouse
 {
     private enum Get : byte
     {
@@ -45,49 +45,59 @@ public class IntelliPro(string path) : IDisposable, Mouse
         SendData(Set.Dpi, BitConverter.GetBytes((short)dpi));
     }
 
-    public int GetPollingRate()
+    public int[] GetPollingRates()
+    {
+        return [1000, 500, 125];
+    }
+    
+    public int GetPollingRateIndex()
     {
         var data = SendRequest(Get.Polling);
         return data[0] switch
         {
-            0 => 1000,
-            1 => 500,
-            2 => 125,
+            0 => 0, // Array index for 1000
+            1 => 1, // Array index for 500,
+            2 => 2, // Array index for 125
             _ => throw new Exception($"Unknown polling rate identifier: {data[0]}")
         };
     }
 
-    public void SetPollingRate(int rate)
+    public void SetPollingRateIndex(int index)
     {
-        byte value = rate switch
+        byte value = index switch
         {
-            1000 => 0,
-            500 => 1,
-            125 => 2,
-            _ => throw new ArgumentOutOfRangeException(nameof(rate), rate, "The rate must be one of 125, 500, 1000")
+            0 => 0, // Array index for 1000
+            1 => 1, // Array index for 500
+            2 => 2, // Array index for 125
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, "The rate must be one of 125, 500, 1000")
         };
 
-        SendData(Set.Polling, new[] { value });
+        SendData(Set.Polling, [value]);
     }
 
-    public int GetLiftOffDistance()
+    public int[] GetLiftOffDistances()
+    {
+        return [2, 3];
+    }
+    
+    public int GetLiftOffDistanceIndex()
     {
         var data = SendRequest(Get.LiftOffDistance);
         return data[0] switch
         {
-            0 => 2,
-            1 => 3,
+            0 => 0, // Array index for 2
+            1 => 1, // Array index for 3
             _ => throw new Exception($"Unknown lift off distance identifier: {data[0]}")
         };
     }
-
-    public void SetLiftOffDistance(int distance)
+    
+    public void SetLiftOffDistanceIndex(int index)
     {
-        byte value = distance switch
+        byte value = index switch
         {
-            2 => 0,
-            3 => 1,
-            _ => throw new ArgumentOutOfRangeException(nameof(distance), distance, "The lift off distance must be one of 2 or 3")
+            0 => 0, // Array index for 2
+            1 => 1, // Array index for 3
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, "The lift off distance must be one of 2 or 3")
         };
 
         SendData(Set.LiftOffDistance, [value]);

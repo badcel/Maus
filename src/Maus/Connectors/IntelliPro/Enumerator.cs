@@ -1,8 +1,8 @@
 using HidApi;
 
-namespace Maus;
+namespace Maus.Connectors.IntelliPro;
 
-public static class IntelliProEnumerator
+public static class Enumerator
 {
     private const ushort VendorId = 0x45E;
     private const ushort ProductId = 0x82A;
@@ -10,11 +10,11 @@ public static class IntelliProEnumerator
     private const int Usage = 0x212;
     private const int Interface = 0x01;
 
-    public static IEnumerable<IntelliProInfo> Enumerate()
+    public static IEnumerable<Info> Enumerate()
     {
         return Hid
             .Enumerate(VendorId, ProductId)
             .Where(x => x is { InterfaceNumber: Interface, Usage: Usage, UsagePage: UsagePage })
-            .Select(x => new IntelliProInfo(x));
+            .Select(x => new Info(x));
     }
 }

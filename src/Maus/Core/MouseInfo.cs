@@ -1,4 +1,4 @@
-namespace Maus;
+namespace Maus.Core;
 
 public interface MouseInfo
 {
