@@ -1,8 +1,8 @@
 using System.Drawing;
 
-namespace Maus;
+namespace Maus.Connectors.Demo;
 
-public class DemoMouse : Mouse
+public class Mouse : Core.Mouse
 {
     private int dpi = 200;
     private int pollingRate = 1000;

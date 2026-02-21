@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Maus;
+namespace Maus.Connectors.IntelliPro;
 
-public class IntelliPro(string path) : IDisposable, Mouse
+public class Mouse(string path) : IDisposable, Core.Mouse
 {
     private enum Get : byte
     {
