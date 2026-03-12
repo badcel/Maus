@@ -11,7 +11,7 @@ application.OnActivate += (sender, args) =>
         if (window.Child is IDisposable d)
             d.Dispose();
 
-        window.SetChild(new MouseView(info.Connect()));
+        window.SetChild(MouseView.New(info.Connect()));
     }
 
 #if DEMO
@@ -21,7 +21,7 @@ application.OnActivate += (sender, args) =>
 #endif
     window.Title = "Window";
     window.SetDefaultSize(300, 300);
-    window.SetChild(new SelectMouseView(mouseInfos, Show));
+    window.SetChild(SelectMouseView.New(mouseInfos, Show));
     window.Show();
 };
 

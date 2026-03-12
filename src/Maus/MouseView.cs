@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using GObject;
 
 namespace Maus;
@@ -9,50 +8,47 @@ public partial class MouseView
     private static readonly string[] pollingRates = ["1000", "500", "125"];
     private static readonly string[] liftOffDistances = ["2", "3"];
 
-    private readonly Mouse? mouse;
     private readonly Gtk.Entry dpiEntry = Gtk.Entry.New();
     private readonly Gtk.ColorDialogButton colorDialogButton = Gtk.ColorDialogButton.New(Gtk.ColorDialog.New());
     private readonly Adw.ComboRow pollingComboRow = Adw.ComboRow.New();
     private readonly Adw.ComboRow liftOffComboRow = Adw.ComboRow.New();
 
-    public MouseView(Mouse mouse) : this()
-    {
-        this.mouse = mouse;
+    private Mouse? mouse;
+    private Mouse Mouse => mouse ?? throw new Exception($"{nameof(MouseView)} is not initialized");
 
-        CreateUi(mouse);
+    public static MouseView New(Mouse mouse)
+    {
+        var mouseView = NewWithProperties([]);
+        mouseView.CreateUi(mouse);
+
+        return mouseView;
     }
 
     private void SetDpi(GObject.Object obj, NotifySignalArgs args)
     {
-        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
-
-        mouse.SetDpi(int.Parse(dpiEntry.GetText()));
+        Mouse.SetDpi(int.Parse(dpiEntry.GetText()));
     }
 
     private void SetPollingRate(GObject.Object obj, NotifySignalArgs args)
     {
-        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
-
-        mouse.SetPollingRate(int.Parse(pollingRates[pollingComboRow.Selected]));
+        Mouse.SetPollingRate(int.Parse(pollingRates[pollingComboRow.Selected]));
     }
 
     private void SetLiftOffDistance(GObject.Object obj, NotifySignalArgs args)
     {
-        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
-
-        mouse.SetLiftOffDistance(int.Parse(liftOffDistances[liftOffComboRow.Selected]));
+        Mouse.SetLiftOffDistance(int.Parse(liftOffDistances[liftOffComboRow.Selected]));
     }
 
     private void SetColor(GObject.Object obj, NotifySignalArgs args)
     {
-        Debug.Assert(mouse is not null, $"{nameof(MouseView)} is not initialized");
-
         var rgba = colorDialogButton.GetRgba();
-        mouse.SetColor(RgbaConverter.ToColor(rgba));
+        Mouse.SetColor(RgbaConverter.ToColor(rgba));
     }
 
     private void CreateUi(Mouse newMouse)
     {
+        mouse = newMouse;
+
         SetOrientation(Gtk.Orientation.Vertical);
         SetSpacing(5);
 
