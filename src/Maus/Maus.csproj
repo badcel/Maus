@@ -5,12 +5,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <!--<DefineConstants>DEMO</DefineConstants>-->
-        <GirCoreVersion>0.7.0</GirCoreVersion>
+        <GirCoreVersion>0.8.0-preview.1</GirCoreVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="HidApi.Net" Version="1.0.4" />
+        <PackageReference Include="HidApi.Net" Version="1.2.0" />
         <PackageReference Include="GirCore.Adw-1" Version="$(GirCoreVersion)" />
         <PackageReference Include="GirCore.GObject-2.0.Integration" Version="$(GirCoreVersion)" />
+        <PackageReference Include="GirCore.Gtk-4.0.Integration" Version="$(GirCoreVersion)" />
     </ItemGroup>
 </Project>

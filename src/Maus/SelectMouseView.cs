@@ -1,26 +1,29 @@
-using System.Diagnostics;
-
 namespace Maus;
 
 [GObject.Subclass<Gtk.Box>]
 public partial class SelectMouseView
 {
-    private readonly IEnumerable<MouseInfo>? mouseInfos;
-    private readonly Action<MouseInfo>? showMouse;
     private readonly Gtk.ListBox listBox = Gtk.ListBox.New();
-
-    public SelectMouseView(IEnumerable<MouseInfo> mouseInfos, Action<MouseInfo> showMouse) : this()
+    
+    private IEnumerable<MouseInfo>? mouseInfos;
+    private Action<MouseInfo>? showMouse;
+    
+    private IEnumerable<MouseInfo> MouseInfos => mouseInfos ?? throw new Exception($"{nameof(mouseInfos)} is null");
+    private Action<MouseInfo> ShowMouse => showMouse ?? throw new Exception($"{nameof(showMouse)} is null");
+    
+    public static SelectMouseView New(IEnumerable<MouseInfo> mouseInfos, Action<MouseInfo> showMouse)
     {
-        this.mouseInfos = mouseInfos;
-        this.showMouse = showMouse;
+        var selectMouseView = NewWithProperties([]);
+        selectMouseView.mouseInfos = mouseInfos;
+        selectMouseView.showMouse = showMouse;
 
-        CreateUi();
+        selectMouseView.CreateUi();
+
+        return selectMouseView;
     }
 
     private void CreateUi()
     {
-        Debug.Assert(mouseInfos is not null, $"{nameof(SelectMouseView)} is not initialized.");
-
         SetOrientation(Gtk.Orientation.Vertical);
         SetSpacing(5);
 
@@ -37,16 +40,13 @@ public partial class SelectMouseView
 
     private void ListBoxOnOnRowActivated(Gtk.ListBox sender, Gtk.ListBox.RowActivatedSignalArgs args)
     {
-        Debug.Assert(mouseInfos is not null, $"{nameof(SelectMouseView)} is not initialized.");
-        Debug.Assert(showMouse is not null, $"{nameof(SelectMouseView)} is not initialized.");
-
         var label = (Gtk.Label?)args.Row.Child;
 
         if (label is null)
             throw new Exception("Selected row does not have a child");
 
-        var intelliProInfo = mouseInfos.First(x => x.GetName() == label.GetText());
-        showMouse(intelliProInfo);
+        var intelliProInfo = MouseInfos.First(x => x.GetName() == label.GetText());
+        ShowMouse(intelliProInfo);
     }
 
     public override void Dispose()
