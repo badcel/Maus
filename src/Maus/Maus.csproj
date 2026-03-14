@@ -4,7 +4,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <!--<DefineConstants>DEMO</DefineConstants>-->
+        <DefineConstants>DEMO</DefineConstants>
         <GirCoreVersion>0.8.0-preview.1</GirCoreVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
