@@ -4,10 +4,10 @@ public class Connector
 {
     public IEnumerable<MouseInfo> Enumerate()
     {
-#if DEMO
-        return Connectors.Demo.Enumerator.Enumerate();
-#else
-        return Connectors.IntelliPro.IntelliProEnumerator.Enumerate();
-#endif
+        foreach(var demo in Connectors.Demo.Enumerator.Enumerate())
+            yield return demo;
+
+        foreach(var intelliPro in Connectors.IntelliPro.Enumerator.Enumerate())
+            yield return intelliPro;
     }
 }

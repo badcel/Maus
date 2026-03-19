@@ -1,9 +1,11 @@
 namespace Maus;
 
 [GObject.Subclass<Gtk.Box>]
+[Gtk.Template<Gtk.AssemblyResource>("selection.ui")]
 public partial class Selection
 {
-    private readonly Gtk.ListBox listBox = Gtk.ListBox.New();
+    [Gtk.Connect]
+    private Gtk.ListBox listBox;
 
     internal SelectionPresenter? Presenter { get; set; }
     
@@ -14,15 +16,7 @@ public partial class Selection
 
     partial void Initialize()
     {
-        SetOrientation(Gtk.Orientation.Vertical);
-        SetSpacing(5);
-
-        listBox.SelectionMode = Gtk.SelectionMode.Single;
-
         listBox.OnRowActivated += ListBoxOnOnRowActivated;
-
-        Append(Gtk.Label.New("Select device"));
-        Append(listBox);
     }
 
     public void SetMouseInfos(IEnumerable<Core.MouseInfo> mouseInfos)
