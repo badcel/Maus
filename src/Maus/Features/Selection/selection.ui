@@ -3,7 +3,7 @@
 <interface>
   <!-- interface-name selection.ui -->
   <requires lib="gtk" version="4.12"/>
-  <template class="MausSelection" parent="GtkBox">
+  <template class="MausSelectionView" parent="GtkBox">
     <property name="orientation">vertical</property>
     <property name="spacing">5</property>
     <child>

@@ -1,6 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
-<!-- Created with Cambalache 0.96.3 -->
-<cambalache-project version="0.96.0" target_tk="gtk-4.0">
+<!-- Created with Cambalache 1.0 -->
+<cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1,webkitgtk-6.0">
   <ui template-class="MausSelection" filename="Maus/Features/Selection/selection.ui" sha256="c39b926db37334516ee54a9b0f7dccae599b5198a48b9b64fd5e259bdf1d9968"/>
+  <ui filename="Maus/Features/Shell/shell.ui" sha256="b231e0de0783c16f32619ac515b4615e2391cb50dfb6a96f46d28fc29aac4ab0">
+    <requires>MausSelection</requires>
+  </ui>
 </cambalache-project>

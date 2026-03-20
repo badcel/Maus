@@ -2,21 +2,15 @@ namespace Maus;
 
 [GObject.Subclass<Gtk.Box>]
 [Gtk.Template<Gtk.AssemblyResource>("selection.ui")]
-public partial class Selection
+public partial class SelectionView
 {
-    [Gtk.Connect]
-    private Gtk.ListBox listBox;
+    [Gtk.Connect] private Gtk.ListBox listBox;
 
     internal SelectionPresenter? Presenter { get; set; }
-    
-    public static Selection New()
-    {
-        return NewWithProperties([]);
-    }
 
     partial void Initialize()
     {
-        listBox.OnRowActivated += ListBoxOnOnRowActivated;
+        listBox.OnRowActivated += OnOnRowActivated;
     }
 
     public void SetMouseInfos(IEnumerable<Core.MouseInfo> mouseInfos)
@@ -27,7 +21,7 @@ public partial class Selection
             listBox.Append(SelectionLabel.New(info));
     }
 
-    private void ListBoxOnOnRowActivated(Gtk.ListBox sender, Gtk.ListBox.RowActivatedSignalArgs args)
+    private void OnOnRowActivated(Gtk.ListBox sender, Gtk.ListBox.RowActivatedSignalArgs args)
     {
         var label = (SelectionLabel?)args.Row.Child;
 
@@ -39,7 +33,7 @@ public partial class Selection
 
     public override void Dispose()
     {
-        listBox.OnRowActivated -= ListBoxOnOnRowActivated;
+        listBox.OnRowActivated -= OnOnRowActivated;
 
         base.Dispose();
     }
