@@ -1,6 +1,9 @@
 using HidApi;
 using Maus;
 
+Adw.Module.Initialize();
+GirCore.Integration.Initialize();
+
 var application = Adw.Application.New("org.Maus", Gio.ApplicationFlags.FlagsNone);
 application.OnActivate += (sender, args) =>
 {
@@ -8,7 +11,7 @@ application.OnActivate += (sender, args) =>
     var selectionViewPresenter = new SelectionPresenter(new Maus.Core.Connector(), detailViewPresenter);
     var shellPresenter = new ShellPresenter(selectionViewPresenter, detailViewPresenter);
  
-    var shell = Shell.New(shellPresenter);
+    var shell = ShellView.New(shellPresenter);
     shell.SetApplication(application);
     shell.Show();
 };

@@ -2,10 +2,10 @@ namespace Maus;
 
 public class DetailPresenter
 {
-    private Detail? _view;
+    private DetailView? _view;
     private Core.Mouse? _mouse;
 
-    public void Attach(Detail view)
+    public void Attach(DetailView view)
     {
         _view = view;
         _view.Presenter = this;

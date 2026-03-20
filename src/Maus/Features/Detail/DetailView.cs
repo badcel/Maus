@@ -1,7 +1,7 @@
 namespace Maus;
 
 [GObject.Subclass<Gtk.Box>]
-public partial class Detail
+public partial class DetailView
 {
     private readonly Gtk.Entry dpiEntry = Gtk.Entry.New();
     private readonly Gtk.ColorDialogButton colorDialogButton = Gtk.ColorDialogButton.New(Gtk.ColorDialog.New());
@@ -9,11 +9,6 @@ public partial class Detail
     private readonly Adw.ComboRow liftOffComboRow = Adw.ComboRow.New();
 
     internal DetailPresenter? Presenter { get; set; }
-
-    public static Detail New()
-    {
-        return NewWithProperties([]);
-    }
 
     public void ShowDpi(int dpi)
     {
@@ -27,14 +22,14 @@ public partial class Detail
 
     public void ShowPollingRates(int[] pollingRates, uint index)
     {
-        var model =  Gtk.StringList.New(pollingRates.Select(x => x.ToString()).ToArray());
+        var model = Gtk.StringList.New(pollingRates.Select(x => x.ToString()).ToArray());
         pollingComboRow.Model = model;
         pollingComboRow.SetSelected(index);
     }
 
     public void ShowLiftOffDistances(int[] liftOffDistances, uint index)
     {
-        var model =  Gtk.StringList.New(liftOffDistances.Select(x => x.ToString()).ToArray());
+        var model = Gtk.StringList.New(liftOffDistances.Select(x => x.ToString()).ToArray());
         liftOffComboRow.Model = model;
         liftOffComboRow.SetSelected(index);
     }
@@ -48,13 +43,13 @@ public partial class Detail
     private void OnPollingRateChanged(Object sender, NotifySignalArgs args)
     {
         if (sender is Adw.ComboRow comboRow)
-            Presenter?.SetPollingRateIndex((int) comboRow.GetSelected());
+            Presenter?.SetPollingRateIndex((int)comboRow.GetSelected());
     }
 
     private void OnLiftOffDistanceChanged(GObject.Object sender, NotifySignalArgs args)
     {
         if (sender is Adw.ComboRow comboRow)
-            Presenter?.SetLiftOffDistanceIndex((int) comboRow.GetSelected());
+            Presenter?.SetLiftOffDistanceIndex((int)comboRow.GetSelected());
     }
 
     private void OnColorChanged(GObject.Object sender, NotifySignalArgs args)

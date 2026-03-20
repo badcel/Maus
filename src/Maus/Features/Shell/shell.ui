@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 1.0 -->
+<interface>
+  <!-- interface-name selection.ui -->
+  <requires lib="gtk" version="4.12"/>
+  <requires lib="libadwaita" version="1.4"/>
+  <template class="MausShellView" parent="GtkApplicationWindow">
+    <property name="default-height">300</property>
+    <property name="default-width">300</property>
+    <property name="title">Maus</property>
+    <child>
+      <object class="AdwNavigationSplitView">
+        <property name="content">
+          <object class="AdwNavigationPage">
+            <property name="title">Maus</property>
+            <child>
+              <object class="MausDetailView" id="detail"/>
+            </child>
+          </object>
+        </property>
+        <property name="sidebar">
+          <object class="AdwNavigationPage">
+            <property name="title">Select</property>
+            <child>>
+              <object class="MausSelectionView" id="selection"/>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>
