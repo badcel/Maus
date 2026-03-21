@@ -2,8 +2,10 @@
 <!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
 <!-- Created with Cambalache 1.0 -->
 <cambalache-project version="1.0.0" target_tk="gtk-4.0" depends="libadwaita-1,webkitgtk-6.0">
-  <ui template-class="MausSelection" filename="Maus/Features/Selection/selection.ui" sha256="c39b926db37334516ee54a9b0f7dccae599b5198a48b9b64fd5e259bdf1d9968"/>
-  <ui filename="Maus/Features/Shell/shell.ui" sha256="b231e0de0783c16f32619ac515b4615e2391cb50dfb6a96f46d28fc29aac4ab0">
-    <requires>MausSelection</requires>
+  <ui template-class="MausSelectionView" filename="Maus/Features/Selection/selection.ui" sha256="4b8de30d0bf09932c5669edf8c163a1ced7c1bc22f346293701a63dc2dee6edf"/>
+  <ui template-class="MausDetailView" filename="Maus/Features/Detail/detail.ui" sha256="ead34b5d2ad6e9ae7eba8d51d4ce987b23420493a1ca12f7675d0d466a7ee356"/>
+  <ui template-class="MausShellView" filename="Maus/Features/Shell/shell.ui" sha256="957bce499506e377c9f8ca9a856b1c2fc82f2216ba625294687270f284dd0cb8">
+    <requires>MausDetailView</requires>
+    <requires>MausSelectionView</requires>
   </ui>
 </cambalache-project>
