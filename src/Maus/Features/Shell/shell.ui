@@ -21,7 +21,7 @@
         <property name="sidebar">
           <object class="AdwNavigationPage">
             <property name="title">Select</property>
-            <child>>
+            <child>
               <object class="MausSelectionView" id="selection"/>
             </child>
           </object>

@@ -1,12 +1,13 @@
 namespace Maus;
 
 [GObject.Subclass<Gtk.Box>]
+[Gtk.Template<Gtk.AssemblyResource>("detail.ui")]
 public partial class DetailView
 {
-    private readonly Gtk.Entry dpiEntry = Gtk.Entry.New();
-    private readonly Gtk.ColorDialogButton colorDialogButton = Gtk.ColorDialogButton.New(Gtk.ColorDialog.New());
-    private readonly Adw.ComboRow pollingComboRow = Adw.ComboRow.New();
-    private readonly Adw.ComboRow liftOffComboRow = Adw.ComboRow.New();
+    [Gtk.Connect] private Gtk.Entry dpiEntry;
+    [Gtk.Connect] private Adw.ComboRow pollingComboRow;
+    [Gtk.Connect] private Adw.ComboRow liftOffComboRow;
+    [Gtk.Connect] private Gtk.ColorDialogButton colorDialogButton;
 
     internal DetailPresenter? Presenter { get; set; }
 
@@ -60,31 +61,18 @@ public partial class DetailView
 
     partial void Initialize()
     {
-        SetOrientation(Gtk.Orientation.Vertical);
-        SetSpacing(5);
-
         Gtk.Editable.Text_PropertyDefinition.Notify(
             sender: dpiEntry,
             signalHandler: OnDpiChanged,
             after: false
         );
 
-        var dpiActionRow = Adw.ActionRow.New();
-        dpiActionRow.Title = "Tracking speed";
-        dpiActionRow.Subtitle = "in dots per inch (DPI)";
-        dpiActionRow.AddSuffix(dpiEntry);
-        dpiActionRow.SetActivatableWidget(dpiEntry);
-
-        pollingComboRow.Title = "Polling rate";
-        pollingComboRow.Subtitle = "in reports / second";
         Adw.ComboRow.SelectedPropertyDefinition.Notify(
             sender: pollingComboRow,
             signalHandler: OnPollingRateChanged,
             after: false
         );
 
-        liftOffComboRow.Title = "Lift off distance";
-        liftOffComboRow.Subtitle = "in mm";
         Adw.ComboRow.SelectedPropertyDefinition.Notify(
             sender: liftOffComboRow,
             signalHandler: OnLiftOffDistanceChanged,
@@ -96,20 +84,6 @@ public partial class DetailView
             signalHandler: OnColorChanged,
             after: false
         );
-
-        var colorActionRow = Adw.ActionRow.New();
-        colorActionRow.Title = "Color";
-        colorActionRow.AddSuffix(colorDialogButton);
-        colorActionRow.SetActivatableWidget(colorDialogButton);
-
-        var listBox = Gtk.ListBox.New();
-        listBox.SelectionMode = Gtk.SelectionMode.None;
-        listBox.Append(dpiActionRow);
-        listBox.Append(pollingComboRow);
-        listBox.Append(liftOffComboRow);
-        listBox.Append(colorActionRow);
-
-        Append(listBox);
     }
 
     public override void Dispose()

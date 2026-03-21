@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 1.0 -->
+<interface>
+  <!-- interface-name selection.ui -->
+  <requires lib="gtk" version="4.12"/>
+  <requires lib="libadwaita" version="1.4"/>
+  <template class="MausDetailView" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="spacing">5</property>
+    <child>
+      <object class="GtkListBox">
+        <child>
+          <object class="AdwActionRow">
+            <property name="activatable-widget">dpiEntry</property>
+            <property name="subtitle">in dots per inch (DPI)</property>
+            <property name="title">Tracking speed</property>
+            <child type="suffix">
+              <object class="GtkEntry" id="dpiEntry"/>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwComboRow" id="pollingComboRow">
+            <property name="subtitle">in reports / second</property>
+            <property name="title">Polling rate</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwComboRow" id="liftOffComboRow">
+            <property name="subtitle">in mm</property>
+            <property name="title">Lift off distance</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="activatable-widget">colorDialogButton</property>
+            <property name="title">Color</property>
+            <child>
+              <object class="GtkColorDialogButton" id="colorDialogButton">
+                <property name="dialog">
+                  <object class="GtkColorDialog"/>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
