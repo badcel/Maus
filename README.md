@@ -1,6 +1,8 @@
 # Maus
 Configure your IntelliMouse Pro.
 
+![Maus screenshot](./img/app.png)
+
 Based on the work of [intellimouse-ctl][intellimouse-ctl] by [@k-visscher](https://github.com/k-visscher).
 
 ## Disclaimer
